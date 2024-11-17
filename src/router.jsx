@@ -8,40 +8,55 @@ import VoucherPage from "./pages/VoucherPage";
 import ProductCreatePage from "./pages/ProductCreatePage";
 import ProductEditPage from "./pages/ProductEditPage";
 import VoucherDetailPage from "./pages/VoucherDetailPage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout />,
     errorElement: <NotFoundPage />,
     children: [
       {
         index: true,
-        element: <DashboardPage />,
+        element: <LoginPage />,
       },
       {
-        path: "/product",
-        element: <ProductPage />,
+        path: "/register",
+        element: <RegisterPage />,
       },
       {
-        path: "/product/create",
-        element: <ProductCreatePage />,
-      },
-      {
-        path: "/product/edit/:id",
-        element: <ProductEditPage />,
-      },
-      {
-        path: "/sale",
-        element: <SalePage />,
-      },
-      {
-        path: "/voucher",
-        element: <VoucherPage />,
-      },
-      {
-        path: "/voucher/detail/:id",
-        element: <VoucherDetailPage/>,
+        path: "dashboard",
+        element: <Layout />,
+        children: [
+          {
+            index:true,
+            element:<DashboardPage/>,
+          },
+          {
+            path: "product",
+            element: <ProductPage />,
+          },
+          {
+            path: "product/create",
+            element: <ProductCreatePage />,
+          },
+          {
+            path: "product/edit/:id",
+            element: <ProductEditPage />,
+          },
+          {
+            path: "sale",
+            element: <SalePage />,
+          },
+          {
+            path: "voucher",
+            element: <VoucherPage />,
+          },
+          {
+            path: "voucher/detail/:id",
+            element: <VoucherDetailPage />,
+          },
+        ],
       },
     ],
   },
