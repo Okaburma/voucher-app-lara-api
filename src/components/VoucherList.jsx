@@ -8,19 +8,30 @@ import VoucherListRowSkeletonLoader from "./VoucherListRowSkeletonLoader";
 import { debounce } from "lodash";
 import Pagination from "./Pagination";
 import VoucherListEmptyStage from "./VoucherListEmptyStage";
+import useCookie from "react-use-cookie";
 
-const fetcher = (url) => fetch(url).then((res) => res.json());
 const VoucherList = () => {
   const searchInput = useRef("");
+  const [token] = useCookie("my_token");
+
   const [search, setSearch] = useState();
   const [fetchUrl, setFetchUrl] = useState(
     import.meta.env.VITE_API_URL + "/vouchers"
   );
+  /* fetcher မှာ Bearer Token ထည့်ပေးလိုက်ဖို့လိုတယ်, Authorization ကြောင့် */
+  const fetcher = (url) =>
+    fetch(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((res) => res.json());
+    
   const { data, isLoading, error } = useSWR(
     search ? `${import.meta.env.VITE_API_URL}/vouchers?q=${search}` : fetchUrl,
     fetcher
   );
 
+  /*input ရဲ့ onChange နဲ့ ရှာလိုက်တဲ့ စာလုံးတိုင်းကို state ထဲထည့်လိုက်တာ */
   const handleSearch = debounce((e) => {
     setSearch(e.target.value);
   }, 500);
@@ -34,8 +45,8 @@ const VoucherList = () => {
     setFetchUrl(url);
   };
 
-  // if (isLoading) return <p>Loading....</p>;
-  // console.log(data);
+  if (isLoading) return <p>Loading....</p>;
+  console.log(data);
 
   return (
     <div>
