@@ -8,15 +8,21 @@ import ProductRow from "./ProductRow";
 import { Link } from "react-router-dom";
 import { debounce } from "lodash";
 import Pagination from "./Pagination";
-
-const fetcher = (url) => fetch(url).then((res) => res.json());
+import useCookie from "react-use-cookie";
 
 const ProductList = () => {
   const [search, setSearch] = useState("");
+  const [token] = useCookie("my_token");
   const [fetchUrl, setFetchUrl] = useState(
     import.meta.env.VITE_API_URL + "/products"
   );
 
+  const fetcher = (url) =>
+    fetch(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((res) => res.json());
   const searchInput = useRef("");
 
   const { data, isLoading, error } = useSWR(
